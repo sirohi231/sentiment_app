@@ -55,7 +55,7 @@ You can test the model training by downloading the dataset to the data folder an
 - https://www.kaggle.com/datasets/kazanova/sentiment140/download?datasetVersionNumber=2
 - https://www.kaggle.com/code/stoicstatic/twitter-sentiment-analysis-for-beginners
 - https://betterprogramming.pub/how-to-dockerize-your-flask-api-cc95843ab625
-- 
+- Go, A., Bhayani, R. and Huang, L., 2009. Twitter sentiment classification using distant supervision. CS224N Project Report, Stanford, 1(2009), p.12.
 
 
 
