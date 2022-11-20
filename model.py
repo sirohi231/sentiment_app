@@ -116,7 +116,7 @@ def my_form_post():
     elif(score == 0):
         label = 'This tweet is negative'
     else:
-        label = 'This tweet is neutral'
+        label = 'Error'
 
 
     return(render_template('index.html', variable=label))
