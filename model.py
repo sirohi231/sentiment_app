@@ -1,15 +1,17 @@
+# main.py
+import nltk
 import re
 import pickle
-
-# nltk
 from nltk.stem import WordNetLemmatizer
+from flask import request 
+from flask import jsonify
+from flask import Flask, render_template
 
 
 lemmatizer = WordNetLemmatizer()
-# grouping together the inflected forms ("better" -> "good")
 
 
-with open('models/pipeline.pickle', 'rb') as f:
+with open('data/pipeline.pickle', 'rb') as f:
     loaded_pipe = pickle.load(f)
 
 
@@ -17,7 +19,6 @@ def predict_pipeline(text):
     return predict(loaded_pipe, text)
 
 
-# Defining dictionary containing all emojis with their meanings.
 emojis = {':)': 'smile', ':-)': 'smile', ';d': 'wink', ':-E': 'vampire', ':(': 'sad', 
           ':-(': 'sad', ':-<': 'sad', ':P': 'raspberry', ':O': 'surprised',
           ':-@': 'shocked', ':@': 'shocked',':-$': 'confused', ':\\': 'annoyed', 
@@ -26,7 +27,7 @@ emojis = {':)': 'smile', ':-)': 'smile', ';d': 'wink', ':-E': 'vampire', ':(': '
           '<(-_-)>': 'robot', 'd[-_-]b': 'dj', ":'-)": 'sadsmile', ';)': 'wink', 
           ';-)': 'wink', 'O:-)': 'angel','O*-)': 'angel','(:-D': 'gossip', '=^.^=': 'cat'}
 
-## Defining set containing all stopwords in english.
+
 stopwords = ['a', 'about', 'above', 'after', 'again', 'ain', 'all', 'am', 'an',
              'and','any','are', 'as', 'at', 'be', 'because', 'been', 'before',
              'being', 'below', 'between','both', 'by', 'can', 'd', 'did', 'do',
@@ -95,3 +96,30 @@ def predict(model, tweet):
         data.append(pred)
 
     return pred
+
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def my_form():
+    return render_template('index.html')
+
+@app.route('/', methods=['POST'])
+def my_form_post():
+    text = request.form['text']
+    
+    score = (predict_pipeline(str(text)))
+
+    if(score == 1):
+        label = 'This tweet is positive'
+    elif(score == 0):
+        label = 'This tweet is negative'
+    else:
+        label = 'This tweet is neutral'
+
+
+    return(render_template('index.html', variable=label))
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True)
